@@ -1,66 +1,57 @@
 #include <boost/json/src.hpp>
+#include <fstream>
+#include <sstream>
 #include <string>
-
-// notes
-#if 0
-// boost usage example
-std::ifstream t(config_path);
-std::stringstream buffer;
-buffer << t.rdbuf();
-boost::json::value config = boost::json::parse(buffer.str());
-
-g_init_p_acceptance = config.at("run_engine")
-                                .at("simulated_annealing")
-                                .at("init_p_acceptance")
-                                .to_number<double>();
-
-g_init_t_log_len = config.at("run_engine")
-                            .at("simulated_annealing")
-                            .at("init_t_log_len")
-                            .to_number<size_t>();
-
-g_stats_filename = config.at("run_engine")
-                            .at("context")
-                            .at("stats_filename")
-                            .as_string()
-                            .c_str();
-
-// interface example
-class Child : public Settings
-{
-    const double max_value;
-    const size_t special_value;
-    const std::string another_value;
-
-    Child(bool instead_generate_jsons = true) :
-        max_value(_field_double("path/to/field/max", min, max));
-        special_value(_field_size_t("path/to/field/special", min, max));
-        another_value(_field_string("path/to/field/another"));
-}
-#endif
+#include <vector>
 
 namespace iestade {
 
 class Settings {
 public:
+    Settings(const std::string& config_filepath)
+    {
+        std::ifstream t(config_filepath);
+        std::stringstream buffer;
+        buffer << t.rdbuf();
+        _config = boost::json::parse(buffer.str());
+    };
 
-    Settings(const std::string& json_filepath = "", const std::string& json_schema_filepath = "") :
-        _json_filepath(json_filepath),
-        _json_schema_filepath(json_schema_filepath){};
+    double field_double(const std::string& address)
+    {
+        return _field(address).to_number<double>();
+    }
 
-    void generate_json() {}
+    size_t field_size_t(const std::string& address)
+    {
+        return _field(address).to_number<size_t>();
+    }
 
-    void generate_json_schema_template() {}
-
-    const double max_value;
+    const std::string field_string(const std::string& address)
+    {
+        return _field(address).as_string().c_str();
+    }
 
 private:
-    const std::string _json_filepath;
-    const std::string _json_schema_filepath;
+    boost::json::value _config;
+    const char _field_delimiter = '/';
 
-    template <typename T>
-    const T _read_from_json(const std::string& json_path)
+
+    // field address in a format "field1/field2/field3"
+    boost::json::value _field(const std::string& address)
     {
+        std::vector<std::string> tokens;
+        std::string token;
+        std::stringstream ss(address);
+        while (getline(ss, token, _field_delimiter)) {
+            tokens.push_back(token);
+        }
+        assert(!tokens.empty());
+
+        boost::json::value v = _config.at(tokens[0]);
+        for (size_t i = 1; i < tokens.size(); i++) {
+            v = v.at(tokens[i]);
+        }
+        return v;
     }
 };
 
