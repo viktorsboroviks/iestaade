@@ -1,86 +1,92 @@
 {
-    "dl_data": [{
-            "ticker": "^SPX",
-            "interval": "1d",
-            "start": "2020-01-01T00:00",
-            "end": "2024-01-01T00:00",
-            "output_path": "cspx_raw.csv"
-        },{
-            "ticker": "EUR=X",
-            "interval": "1d",
-            "start": "2020-01-01T00:00",
-            "end": "2024-01-01T00:00",
-            "output_path": "eurusd_raw.csv"
-        }
-    ],
-    "prepare_data": {
-        "common_dtindex": [[{
-                    "input_path": "cspx_raw.csv",
-                    "output_path": "cspx.csv"
-                },{
-                    "input_path": "eurusd_raw.csv",
-                    "output_path": "eurusd.csv"
-                }
-            ]
-        ]
+  "dl_data": [
+    {
+      "ticker": "^SPX",
+      "interval": "1d",
+      "start": "2020-01-01T00:00",
+      "end": "2024-01-01T00:00",
+      "output_path": "cspx_raw.csv"
     },
-    "run_engine": {
-        "simulated_annealing": {
-            "n_states": 5000000,
-            "init_p_acceptance": 0.97,
-            "init_t_log_len": 100000,
-            "cooling_rate": 0.99,
-            "cooling_round_len": 200,
-            "e_sma_fast_len": 50,
-            "e_sma_slow_len": 100
-        },
-        "state": {
-            "data_size": 200,
-            "max_open_positions": 3
-        },
-        "context": {
-            "progress": {
-                "update_period": 1
-            },
-            "log_filename": "log.csv",
-            "stats_filename": "stats.txt"
-        },
-        "account": {
-            "initial_cash": 100.0,
-            "currency": "EUR",
-            "assets": [{
-                    "instrument_config_path": "instrument_cspx.json",
-                    "security_data_path": "cspx.csv",
-                    "fx_data_path": "eurusd.csv"
-                }
-            ]
-        },
-        "report": {
-            "n": 200,
-            "dir_name": "reports",
-            "date_format": "%F",
-            "account_data_file_prefix": "account_data_state",
-            "operations_file_prefix": "operations_state"
-        }
-    },
-    "plot_result": {
-        "energy_graph": {
-            "input_path": "log.csv",
-            "output_path": "energy_graph.html"
-        },
-        "account_data_graph": {
-            "font_size": 8,
-            "height": 700,
-            "width": 1200,
-            "scale": 3,
-            "log_path": "log.csv",
-            "security_data_path": "cspx.csv",
-            "security_name": "^SPX(USD)",
-            "fx_data_path": "eurusd.csv",
-            "security_name_in_account_currency": "^SPX(EUR)",
-            "operations_path_regex": "./reports/operations_.*csv",
-            "account_data_path_regex": "./reports/account_data_.*csv",
-            "output_extension": "png"
-        }
+    {
+      "ticker": "EUR=X",
+      "interval": "1d",
+      "start": "2020-01-01T00:00",
+      "end": "2024-01-01T00:00",
+      "output_path": "eurusd_raw.csv"
     }
+  ],
+  "prepare_data": {
+    "common_dtindex": [
+      [
+        {
+          "input_path": "cspx_raw.csv",
+          "output_path": "cspx.csv"
+        },
+        {
+          "input_path": "eurusd_raw.csv",
+          "output_path": "eurusd.csv"
+        }
+      ]
+    ]
+  },
+  "run_engine": {
+    "simulated_annealing": {
+      "n_states": 5000000,
+      "init_p_acceptance": 0.97,
+      "init_t_log_len": 100000,
+      "cooling_rate": 0.99,
+      "cooling_round_len": 200,
+      "e_sma_fast_len": 50,
+      "e_sma_slow_len": 100
+    },
+    "state": {
+      "data_size": 200,
+      "max_open_positions": 3
+    },
+    "context": {
+      "progress": {
+        "update_period": 1
+      },
+      "log_filename": "log.csv",
+      "stats_filename": "stats.txt"
+    },
+    "account": {
+      "initial_cash": 100.0,
+      "currency": "EUR",
+      "assets": [
+        {
+          "instrument_config_path": "instrument_cspx.json",
+          "security_data_path": "cspx.csv",
+          "fx_data_path": "eurusd.csv"
+        }
+      ]
+    },
+    "report": {
+      "n": 200,
+      "dir_name": "reports",
+      "date_format": "%F",
+      "account_data_file_prefix": "account_data_state",
+      "operations_file_prefix": "operations_state"
+    }
+  },
+  "plot_result": {
+    "energy_graph": {
+      "input_path": "log.csv",
+      "output_path": "energy_graph.html"
+    },
+    "account_data_graph": {
+      "font_size": 8,
+      "height": 700,
+      "width": 1200,
+      "scale": 3,
+      "log_path": "log.csv",
+      "security_data_path": "cspx.csv",
+      "security_name": "^SPX(USD)",
+      "fx_data_path": "eurusd.csv",
+      "security_name_in_account_currency": "^SPX(EUR)",
+      "operations_path_regex": "./reports/operations_.*csv",
+      "account_data_path_regex": "./reports/account_data_.*csv",
+      "output_extension": "png"
+    }
+  }
 }
