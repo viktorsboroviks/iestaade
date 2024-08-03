@@ -7,23 +7,23 @@
 
 all: examples
 
-examples: settings.o
+examples: config.o
 
 examples_graph: graph.o examples/graph_config.json
 	./graph.o
 	python3 scripts/plot_graph.py examples/graph_config.json
 
-settings.o: examples/settings.cpp
+config.o: examples/config.cpp
 	g++ -Wall -Wextra -Werror -Wpedantic \
 		-std=c++20 -O3 \
 		-I./include \
-		examples/settings.cpp -o $@
+		examples/config.cpp -o $@
 
 format: clang-format
 
 clang-format: \
 		include/iestade.hpp \
-		examples/settings.cpp
+		examples/config.cpp
 	clang-format -i $^
 
 clean:
