@@ -1,6 +1,8 @@
+#pragma once
 #include <boost/json/src.hpp>
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -14,8 +16,8 @@ boost::json::value value_from_json(const std::string& file_path,
     const std::ifstream t(file_path);
     std::stringstream buffer;
     buffer << t.rdbuf();
-    const boost::json::value config = boost::json::parse(buffer.str());
-    assert(!config.is_null());
+    boost::json::value v = boost::json::parse(buffer.str());
+    assert(!v.is_null());
 
     std::vector<std::string> tokens;
     std::string token;
@@ -25,8 +27,11 @@ boost::json::value value_from_json(const std::string& file_path,
     }
     assert(!tokens.empty());
 
-    boost::json::value v = config.at(tokens[0]);
-    for (size_t i = 1; i < tokens.size(); i++) {
+    for (size_t i = 0; i < tokens.size(); i++) {
+        if (!v.as_object().if_contains(tokens[i])) {
+            throw std::runtime_error("field not found: \"" + key_path +
+                                     "\" in \"" + file_path + "\"");
+        }
         v = v.at(tokens[i]);
     }
     return v;
