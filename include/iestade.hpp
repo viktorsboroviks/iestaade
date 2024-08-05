@@ -8,7 +8,11 @@
 
 namespace iestade {
 
-const char KEY_PATH_DELIMITER = '/';
+const char KEY_PATH_DELIMITER    = '/';
+const bool DEFAULT_BOOL          = false;
+const double DEFAULT_DOUBLE      = -1.0;
+const size_t DEFAULT_SIZE_T      = SIZE_T_MAX;
+const std::string DEFAULT_STRING = "undefined";
 
 boost::json::value value_from_json(const std::string& file_path,
                                    const std::string& key_path)
@@ -37,27 +41,77 @@ boost::json::value value_from_json(const std::string& file_path,
     return v;
 }
 
-bool bool_from_json(const std::string& file_path, const std::string& key_path)
+bool bool_from_json(const std::string& file_path,
+                    const std::string& key_path,
+                    bool optional      = false,
+                    bool default_value = DEFAULT_BOOL)
 {
-    return value_from_json(file_path, key_path).get_bool();
+    bool v;
+    try {
+        v = value_from_json(file_path, key_path).get_bool();
+    }
+    catch (std::runtime_error& e) {
+        if (!optional) {
+            return default_value;
+        }
+        throw e;
+    }
+    return v;
 }
 
 double double_from_json(const std::string& file_path,
-                        const std::string& key_path)
+                        const std::string& key_path,
+                        bool optional        = false,
+                        double default_value = DEFAULT_BOOL)
 {
-    return value_from_json(file_path, key_path).to_number<double>();
+    double v;
+    try {
+        v = value_from_json(file_path, key_path).to_number<double>();
+    }
+    catch (std::runtime_error& e) {
+        if (optional) {
+            return default_value;
+        }
+        throw e;
+    }
+    return v;
 }
 
 size_t size_t_from_json(const std::string& file_path,
-                        const std::string& key_path)
+                        const std::string& key_path,
+                        bool optional        = false,
+                        size_t default_value = DEFAULT_SIZE_T)
 {
-    return value_from_json(file_path, key_path).to_number<size_t>();
+    size_t v;
+    try {
+        v = value_from_json(file_path, key_path).to_number<size_t>();
+    }
+    catch (std::runtime_error& e) {
+        if (optional) {
+            return default_value;
+        }
+        throw e;
+    }
+    return v;
 }
 
-const std::string string_from_json(const std::string& file_path,
-                                   const std::string& key_path)
+const std::string string_from_json(
+        const std::string& file_path,
+        const std::string& key_path,
+        bool optional                   = false,
+        const std::string default_value = DEFAULT_STRING)
 {
-    return value_from_json(file_path, key_path).as_string().c_str();
+    std::string v;
+    try {
+        v = value_from_json(file_path, key_path).as_string().c_str();
+    }
+    catch (std::runtime_error& e) {
+        if (optional) {
+            return default_value;
+        }
+        throw e;
+    }
+    return v;
 }
 
 }  // namespace iestade

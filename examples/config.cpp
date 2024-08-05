@@ -4,11 +4,11 @@
 
 struct MySettings {
     double init_p_acceptance = 0.1;
-    size_t data_size = 100;
-    std::string date_format = "!";
-    double x = 1.0;
-    size_t y = 2;
-    std::string z = "no config";
+    size_t data_size         = 100;
+    std::string date_format  = "!";
+    double x                 = 1.0;
+    size_t y                 = 2;
+    std::string z            = "no config";
 
     MySettings() {}
 
