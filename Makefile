@@ -2,19 +2,15 @@
 	all \
 	examples \
 	format \
-	clang-format \
-	jq \
+	format-cpp \
+	format-json \
 	lint \
-	cppcheck \
+	lint-cpp \
 	clean
 
 all: examples
 
 examples: config.o
-
-examples-graph: graph.o examples/graph_config.json
-	./graph.o
-	python3 scripts/plot_graph.py examples/graph_config.json
 
 config.o: examples/config.cpp
 	g++ -Wall -Wextra -Werror -Wpedantic \
@@ -22,19 +18,19 @@ config.o: examples/config.cpp
 		-I./include \
 		examples/config.cpp -o $@
 
-format: clang-format jq
+format: format-cpp format-json
 
-clang-format: \
+format-cpp: \
 		include/iestade.hpp \
 		examples/config.cpp
 	clang-format -i $^
 
-jq: examples/config.json
+format-json: examples/config.json
 	jq . examples/config.json | sponge examples/config.json
 
-lint: cppcheck
+lint: lint-cpp
 
-cppcheck: include/iestade.hpp
+lint-cpp: include/iestade.hpp
 	cppcheck \
 		--enable=warning,portability,performance \
 		--enable=style,information \
