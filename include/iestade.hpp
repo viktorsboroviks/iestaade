@@ -50,11 +50,11 @@ bool bool_from_json(const std::string& file_path,
     try {
         v = value_from_json(file_path, key_path).get_bool();
     }
-    catch (std::runtime_error& e) {
+    catch (const std::runtime_error& e) {
         if (!optional) {
             return default_value;
         }
-        throw e;
+        throw;
     }
     return v;
 }
@@ -68,11 +68,11 @@ double double_from_json(const std::string& file_path,
     try {
         v = value_from_json(file_path, key_path).to_number<double>();
     }
-    catch (std::runtime_error& e) {
+    catch (const std::runtime_error& e) {
         if (optional) {
             return default_value;
         }
-        throw e;
+        throw;
     }
     return v;
 }
@@ -86,11 +86,11 @@ size_t size_t_from_json(const std::string& file_path,
     try {
         v = value_from_json(file_path, key_path).to_number<size_t>();
     }
-    catch (std::runtime_error& e) {
+    catch (const std::runtime_error& e) {
         if (optional) {
             return default_value;
         }
-        throw e;
+        throw;
     }
     return v;
 }
@@ -98,18 +98,18 @@ size_t size_t_from_json(const std::string& file_path,
 const std::string string_from_json(
         const std::string& file_path,
         const std::string& key_path,
-        bool optional                   = false,
-        const std::string default_value = DEFAULT_STRING)
+        bool optional                    = false,
+        const std::string& default_value = DEFAULT_STRING)
 {
     std::string v;
     try {
         v = value_from_json(file_path, key_path).as_string().c_str();
     }
-    catch (std::runtime_error& e) {
+    catch (const std::runtime_error& e) {
         if (optional) {
             return default_value;
         }
-        throw e;
+        throw;
     }
     return v;
 }
