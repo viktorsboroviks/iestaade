@@ -1,6 +1,6 @@
 #include <string>
 
-#include "iestade.hpp"
+#include "iestaade.hpp"
 
 struct MySettings {
     double init_p_acceptance = 0.1;
@@ -13,18 +13,18 @@ struct MySettings {
     MySettings() {}
 
     MySettings(const std::string& config_filepath) :
-        init_p_acceptance(iestade::double_from_json(config_filepath,
-                                                    "run_engine/"
-                                                    "simulated_annealing/"
-                                                    "init_p_acceptance")),
-        data_size(iestade::size_t_from_json(config_filepath,
-                                            "run_engine/"
-                                            "state/"
-                                            "data_size")),
-        date_format(iestade::string_from_json(config_filepath,
-                                              "run_engine/"
-                                              "report/"
-                                              "date_format"))
+        init_p_acceptance(iestaade::double_from_json(config_filepath,
+                                                     "run_engine/"
+                                                     "simulated_annealing/"
+                                                     "init_p_acceptance")),
+        data_size(iestaade::size_t_from_json(config_filepath,
+                                             "run_engine/"
+                                             "state/"
+                                             "data_size")),
+        date_format(iestaade::string_from_json(config_filepath,
+                                               "run_engine/"
+                                               "report/"
+                                               "date_format"))
     {
     }
 };

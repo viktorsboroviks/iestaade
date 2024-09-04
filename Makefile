@@ -21,7 +21,7 @@ config.o: examples/config.cpp
 format: format-cpp format-json
 
 format-cpp: \
-		include/iestade.hpp \
+		include/iestaade.hpp \
 		examples/config.cpp
 	clang-format -i $^
 
@@ -30,7 +30,7 @@ format-json: examples/config.json
 
 lint: lint-cpp
 
-lint-cpp: include/iestade.hpp
+lint-cpp: include/iestaade.hpp
 	cppcheck \
 		--enable=warning,portability,performance \
 		--enable=style,information \

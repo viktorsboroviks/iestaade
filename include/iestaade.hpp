@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-namespace iestade {
+namespace iestaade {
 
 const char KEY_PATH_DELIMITER    = '/';
 const bool DEFAULT_BOOL          = false;
@@ -114,4 +114,4 @@ const std::string string_from_json(
     return v;
 }
 
-}  // namespace iestade
+}  // namespace iestaade
