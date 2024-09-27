@@ -18,6 +18,10 @@ boost::json::value value_from_json(const std::string& file_path,
                                    const std::string& key_path)
 {
     const std::ifstream t(file_path);
+    if (!t.good()) {
+        throw std::runtime_error("file not found: \"" + file_path + "\"");
+    }
+
     std::stringstream buffer;
     buffer << t.rdbuf();
     boost::json::value v = boost::json::parse(buffer.str());
