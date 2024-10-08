@@ -12,7 +12,7 @@ struct MySettings {
 
     MySettings() {}
 
-    MySettings(const std::string& config_filepath) :
+    explicit MySettings(const std::string& config_filepath) :
         init_p_acceptance(iestaade::double_from_json(config_filepath,
                                                      "run_engine/"
                                                      "simulated_annealing/"
