@@ -10,7 +10,7 @@
 
 all: examples
 
-examples: config.o
+examples: config.o csv.o
 
 config.o: examples/config.cpp
 	g++ -Wall -Wextra -Werror -Wpedantic \
@@ -18,11 +18,18 @@ config.o: examples/config.cpp
 		-I./include \
 		examples/config.cpp -o $@
 
+csv.o: examples/csv.cpp examples/data.csv
+	g++ -Wall -Wextra -Werror -Wpedantic \
+		-std=c++20 -O3 \
+		-I./include \
+		examples/csv.cpp -o $@
+
 format: format-cpp format-json
 
 format-cpp: \
 		include/iestaade.hpp \
-		examples/config.cpp
+		examples/config.cpp \
+		examples/csv.cpp
 	clang-format -i $^
 
 format-json: examples/config.json
@@ -30,7 +37,10 @@ format-json: examples/config.json
 
 lint: lint-cpp
 
-lint-cpp: include/iestaade.hpp
+lint-cpp: \
+		include/iestaade.hpp \
+		examples/config.cpp \
+		examples/csv.cpp
 	cppcheck \
 		--enable=warning,portability,performance \
 		--enable=style,information \
