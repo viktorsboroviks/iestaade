@@ -18,7 +18,10 @@ config.o: examples/config.cpp
 		-I./include \
 		examples/config.cpp -o $@
 
-csv.o: examples/csv.cpp examples/data.csv
+csv.o: \
+		examples/csv.cpp \
+		examples/data_struct.csv \
+		examples/data_vector.csv
 	g++ -Wall -Wextra -Werror -Wpedantic \
 		-std=c++20 -O3 \
 		-I./include \

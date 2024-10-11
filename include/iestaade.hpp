@@ -136,7 +136,7 @@ const std::string string_from_json(
  * columns in the CSV file does not match the number of members in `TStruct`.
  */
 template <typename TStruct, typename... TMembers>
-void vector_from_csv(const std::string& file_path,
+void struct_from_csv(const std::string& file_path,
                      std::vector<TStruct>& v,
                      const char separator = ',')
 {
@@ -176,6 +176,41 @@ void vector_from_csv(const std::string& file_path,
                           reinterpret_cast<char*>(&row) + offset)),
           offset += sizeof(TMembers)),
          ...);
+
+        v.push_back(row);
+    }
+
+    f.close();
+}
+
+/**
+ * @brief reads data from a csv file and populates a 2d vector of type T.
+ */
+template <typename T>
+void vector_from_csv(const std::string& file_path,
+                     std::vector<std::vector<T>>& v,
+                     const char separator = ',')
+{
+    std::ifstream f(file_path);
+    if (!f.good()) {
+        throw std::runtime_error("file not found: \"" + file_path + "\"");
+    }
+
+    // skip header
+    std::string line;
+    std::getline(f, line);
+
+    // read the data
+    while (std::getline(f, line)) {
+        std::stringstream line_stream(line);
+        std::vector<T> row;
+        std::string cell;
+
+        while (std::getline(line_stream, cell, separator)) {
+            T value;
+            std::stringstream(cell) >> value;
+            row.push_back(value);
+        }
 
         v.push_back(row);
     }
